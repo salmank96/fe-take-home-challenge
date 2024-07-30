@@ -64,10 +64,9 @@ function Homepage() {
       setIsPopup(true);
     }
   }, []);
-  console.log("categories++++", query);
   return (
     <>
-      <Hero />
+      <Hero setIsPopup={setIsPopup} />
       <div className="container max-w-[1180px] mx-auto">
         {/* <Card /> */}
         <div className="mt-10">
