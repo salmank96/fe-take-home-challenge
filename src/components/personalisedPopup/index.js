@@ -4,7 +4,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 function PersonalizedPopup({ isPopup, setIsPopup, setQuery, setSourceQuery }) {
   const [formData, setFormData] = useState({
     source: [],
-    categories: [],
+    categories: "",
   });
   const categories = [
     { name: "Science", link: "science" },
@@ -44,27 +44,7 @@ function PersonalizedPopup({ isPopup, setIsPopup, setQuery, setSourceQuery }) {
     });
   };
   const handleCategory = (item) => {
-    setFormData((prevFormData) => {
-      const isSelected = prevFormData.categories.find(
-        (source) => source.link === item.link
-      );
-      let updatedSources;
-
-      if (isSelected) {
-        // Remove item if already selected
-        updatedSources = prevFormData.categories.filter(
-          (source) => source.link !== item.link
-        );
-      } else {
-        // Add item if not selected
-        updatedSources = [...prevFormData.categories, item];
-      }
-
-      return {
-        ...prevFormData,
-        categories: updatedSources,
-      };
-    });
+    setFormData({ ...formData, categories: item.name });
   };
 
   const handleSave = () => {
@@ -72,9 +52,7 @@ function PersonalizedPopup({ isPopup, setIsPopup, setQuery, setSourceQuery }) {
       return;
     }
     const sourceLinks = formData.source.map((source) => source.link);
-    const categoryLinks = formData.categories
-      .map((category) => category.link)
-      .join(", ");
+    const categoryLinks = formData.categories;
     localStorage.setItem("sources", JSON.stringify(sourceLinks));
     localStorage.setItem("categories", JSON.stringify(categoryLinks));
     setQuery(categoryLinks);
@@ -124,9 +102,7 @@ function PersonalizedPopup({ isPopup, setIsPopup, setQuery, setSourceQuery }) {
                       key={item.link}
                       onClick={() => handleCategory(item)}
                       className={`border border-gray-300 h-6 w-fit px-4 mb-4 md:mb-0 rounded-full flex items-center justify-center cursor-pointer ${
-                        formData.categories.some(
-                          (source) => source.link === item.link
-                        )
+                        formData.categories === item.name
                           ? "bg-blue-500 text-white"
                           : "bg-white text-gray-800"
                       }`}
