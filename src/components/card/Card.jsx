@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import SearchField from "../searchField/SearchField";
 
-export default function Card({ news,selectedCategory }) {
+export default function Card({ news, selectedCategory }) {
   const formatDate = (dateString) => {
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const options = { day: "numeric", month: "long", year: "numeric" };
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   };
   return (
     <>
@@ -14,7 +14,11 @@ export default function Card({ news,selectedCategory }) {
         <section class="mb-32 text-center mt-6">
           <div>
             <h2 class="mb-12 text-center text-3xl font-bold">
-              {`${selectedCategory !== "All categories" ? selectedCategory + " Latest News"  : "Latest News"}`}
+              {`${
+                selectedCategory !== "All categories"
+                  ? selectedCategory + " Latest News"
+                  : "Latest News"
+              }`}
             </h2>
           </div>
 
@@ -22,79 +26,47 @@ export default function Card({ news,selectedCategory }) {
             {news?.map((item, idx) => {
               if (item.urlToImage !== null) {
                 return (
-                  <div
-                    key={idx}
-                    class="mb-6 mx-3 md:mx-0  lg:mb-0 shadow-md hover:shadow-lg transition-all duration-150 rounded-md"
-                  >
-                    <a href={item?.url} target="_blank">
+                  <>
                     <div
-                      class="relative mb-6 overflow-hidden rounded-t-md bg-cover bg-no-repeat shadow-lg dark:shadow-black/20"
-                      data-te-ripple-init
-                      data-te-ripple-color="light"
+                      key={idx}
+                      className="w-full  relative pb-16 lg:pb-10  mx-auto sm:mx-0"
                     >
-                      <img
-                        src={item?.urlToImage || "/images/news-card.png"}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = "/images/news-card.png";
-                        }}
-                        class="w-full max-h-[250px] min-h-[250px] object-cover"
-                        alt="News Image"
-                      />
-                      
-                        <div class="absolute top-0 right-0 bottom-0 left-0 h-full w-full overflow-hidden bg-fixed opacity-0 transition duration-300 ease-in-out hover:opacity-100 bg-[hsla(0,0%,98.4%,.15)]"></div>
-                    </div>
-                    </a>
-                    <div className="p-2">
-                      <h5 class="mb-3 text-left text-[20px] leading-6 font-bold text-[rgb(34_36_47)]">
-                        {item?.title &&
-                          item.title.split(" ").slice(0, 8).join(" ")}
-                      </h5>
-                      {/* <div class="mb-3 flex items-center justify-center text-sm font-medium text-danger dark:text-danger-500">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="mr-2 h-5 w-5"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.107 1.107 0 00-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 01-1.652.928l-.679-.906a1.125 1.125 0 00-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 00-8.862 12.872M12.75 3.031a9 9 0 016.69 14.036m0 0l-.177-.529A2.25 2.25 0 0017.128 15H16.5l-.324-.324a1.453 1.453 0 00-2.328.377l-.036.073a1.586 1.586 0 01-.982.816l-.99.282c-.55.157-.894.702-.8 1.267l.073.438c.08.474.49.821.97.821.846 0 1.598.542 1.865 1.345l.215.643m5.276-3.67a9.012 9.012 0 01-5.276 3.67m0 0a9 9 0 01-10.275-4.835M15.75 9c0 .896-.393 1.7-1.016 2.25"
-                        />
-                      </svg>
-                      Travels
-                    </div> */}
-                      {/* <p class="mb-6 text-left text-neutral-500 dark:text-neutral-300">
-                      <small>
-                        Published <u>{item.publishedAt.substring(0, 10)}</u> by
-                        <a href="#!"> {item.author}</a>
-                      </small>
-                    </p> */}
-                      <div className="flex justify-between mb-2">
-                        <p className="text-neutral-500 text-sm">
+                      <a href={item?.url} target="_blank">
+                        <div className="shadow h-64 rounded">
+                          <img
+                            src={item?.urlToImage || "/images/news-card.png"}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "/images/news-card.png";
+                            }}
+                            alt
+                            className="h-full w-full object-cover overflow-hidden rounded"
+                          />
+                        </div>
+                      </a>
+
+                      <div className="p-6 shadow-lg w-11/12 mx-auto -mt-20 bg-white rounded z-20 relative">
+                        <p className="uppercase text-sm text-indigo-700 text-center pb-3">
+                          {item?.title &&
+                            item.title.split(" ").slice(0, 8).join(" ")}
+                        </p>
+                        <p className="text-lg text-gray-800 text-center pb-3">
+                          {item?.description &&
+                            item.description.split(" ").slice(0, 20).join(" ") +
+                              " . . ."}
+                        </p>
+                        <p className="text-sm text-gray-800 text-center">
                           {formatDate(item?.publishedAt)}
+
+                          <span className="text-indigo-700 cursor-pointer pl-2">
+                            {item?.source?.name
+                              ? item?.source?.name
+                              : item.author}
+                          </span>
                         </p>
-                        <p className="text-neutral-500 text-sm">
-                          {item.author &&
-                            item.author.split(" ").slice(0, 2).join(" ")}
-                        </p>
-                        {!item.author && (
-                          <p className={`text-neutral-600 text-sm ${item.author ? "hidden" : "block"}`}>
-                            {!item.author && item?.source?.name ? item?.source?.name  : "Author"}
-                          </p>
-                        )}
                       </div>
-                      <p class="text-neutral-500 text-left dark:text-neutral-300">
-                        {/* {item.description} */}
-                        {item?.description &&
-                          item.description.split(" ").slice(0, 20).join(" ") +
-                            " . . ."}
-                      </p>
                     </div>
-                  </div>
+                  </>
                 );
               }
             })}
