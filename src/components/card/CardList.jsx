@@ -2,40 +2,27 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import { css } from "@emotion/react";
 import { ClipLoader } from "react-spinners";
-export default function CardList({ searchQuery, categoryQuery ,sourceQuery,fromDate,toDate,selectedCategory  }) {
+export default function CardList({ searchQuery,setSearchQuery, categoryQuery ,sourceQuery,fromDate,toDate,selectedCategory  }) {
   const [news, setNews] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchNews = async () => {
       let newsAPIKey = process.env.REACT_APP_API_KEY;
-      let apiUrl;
-      // let apiUrl = searchQuery
-      //   ? `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${newsAPIKey}&language=en&searchIn=title`
-      //   : `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsAPIKey}`;
-      if (fromDate && toDate ) {
+     
+      
         // Fetch news based on category
         // apiUrl = `https://newsapi.org/v2/everything?q=apple&from=${fromDate}&to=${toDate}&sortBy=popularity&apiKey=${newsAPIKey}`;
-        apiUrl = `https://news-nextjs-apis.vercel.app/api/time-news?fromDate=${fromDate}&toDate=${toDate}&sortBy=popularity&apiKey=${newsAPIKey}`;
-      } else if (searchQuery) {
-        // Fetch news based on search query
-        // apiUrl = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${newsAPIKey}&language=en&searchIn=title`;
-        apiUrl = `https://news-nextjs-apis.vercel.app/api/search-news?q=${searchQuery}&apiKey=${newsAPIKey}`;
-      } else if(sourceQuery){
-        // apiUrl = `https://newsapi.org/v2/top-headlines?sources=${sourceQuery}&apiKey=${newsAPIKey}`;
-        apiUrl = `https://news-nextjs-apis.vercel.app/api/source-news?sources=${sourceQuery}&apiKey=${newsAPIKey}`;
-      } else {
-        // Fetch general top headlines
-        // apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsAPIKey}`;
-        apiUrl = `https://news-nextjs-apis.vercel.app/api/top-news?apiKey=${newsAPIKey}`;
-      }
+      const  apiUrl = `https://news-nextjs-apis.vercel.app/api/news-org?q=${searchQuery}&sources=${sourceQuery}&fromDate=${fromDate}&toDate=${toDate}&sortBy=popularity&apiKey=${newsAPIKey}`;
       try {
         setLoading(true);
         const response = await fetch(apiUrl);
         const data = await response.json();
         if(data?.articles){
           setNews(data.articles);
+          setSearchQuery("")
         }else if(data?.sources){
           setNews(data?.sources);
+          setSearchQuery("")
         }
       } catch (error) {
         console.error("Error fetching data:", error);

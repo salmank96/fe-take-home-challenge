@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../components/card/Card";
 import CardList from "../../components/card/CardList";
 import SearchField from "../../components/searchField/SearchField";
 import Hero from "../../components/hero";
-
+import PersonalizedPopup from "../../components/personalisedPopup";
 function Homepage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryQuery, setCatgoryQuery] = useState();
-  const [sourceQuery, setSourceQuery] = useState();
+  const [categoryQuery, setCatgoryQuery] = useState("");
+  const [sourceQuery, setSourceQuery] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [query, setQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All categories");
-
+  const [selectedCategory, setSelectedCategory] = useState("Filters");
+  const [isPopup, setIsPopup] = useState(false);
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -51,6 +51,20 @@ function Homepage() {
     }
     // Here you can use 'from' and 'to' to perform your search or any other operation
   };
+  useEffect(() => {
+    const sources = JSON.parse(localStorage.getItem("sources"));
+    const cats = JSON.parse(localStorage.getItem("categories"));
+    if (sources) {
+      setSourceQuery(sources);
+    }
+    if (cats) {
+      setSearchQuery(cats);
+    }
+    if (!sources && !cats) {
+      setIsPopup(true);
+    }
+  }, []);
+  console.log("categories++++", query);
   return (
     <>
       <Hero />
@@ -76,9 +90,17 @@ function Homepage() {
             fromDate={fromDate}
             toDate={toDate}
             selectedCategory={selectedCategory}
+            setSearchQuery={setQuery}
           />
         </div>
       </div>
+      {isPopup && (
+        <PersonalizedPopup
+          setIsPopup={setIsPopup}
+          setQuery={setSearchQuery}
+          setSourceQuery={setSourceQuery}
+        />
+      )}
     </>
   );
 }
